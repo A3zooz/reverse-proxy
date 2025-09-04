@@ -67,6 +67,8 @@ export function loginHandler(req, res) {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
         const token = generateToken(user);
-        res.status(200).json({ token });
+        // put it in httpOnly cookie
+        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 }); // 1 hour
+        res.json({ token });
     })
 }
