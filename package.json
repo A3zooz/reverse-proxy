@@ -11,22 +11,26 @@
     "restart": "pm2 restart all",
     "delete": "pm2 delete all",
     "stopall": "pm2 stop all"
-
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "express": "^5.1.0",
     "express-rate-limit": "^8.0.1",
     "fs": "^0.0.1-security",
     "http-proxy": "^1.18.1",
     "http-proxy-middleware": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
-    "pm2": "^6.0.10"
+    "pm2": "^6.0.10",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "concurrently": "^9.2.1"
+    "@eslint/js": "^9.34.0",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.34.0"
   }
 }
