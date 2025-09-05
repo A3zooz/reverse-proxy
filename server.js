@@ -1,7 +1,7 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
 import morgan from "morgan";
-import { authMiddleware, loginHandler, registerHandler } from "./middleware/auth.js";
+import { authMiddleware } from "./middleware/auth.js";
 import proxyRouter from "./routes/proxy.js";
 import authRouter from "./routes/auth.js";
 
