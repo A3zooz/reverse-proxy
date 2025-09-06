@@ -12,7 +12,7 @@ const backends = JSON.parse(fs.readFileSync("backends.json"));
 
 async function checkHealth(backend) {
     try {
-        const res = await axios.get(`${backend.url}/api/${backend.healthPath}`, { timeout: 5000 });
+        const res = await axios.get(`${backend.url}${backend.healthPath}`, { timeout: 5000 });
         return res.status === 200;
     } catch (err) {
         console.error(`Health check failed for ${backend.url}:`, err);

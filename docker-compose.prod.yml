@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  reverse-proxy:
+    build: 
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "3001:3001"
+      - "4001-4010:4001-4010"  # Range of backend ports
+    environment:
+      - NODE_ENV=production
+      - DB_PATH=/app/data/database.db
+      - PORT=3001
+      # Add your JWT secret here or pass it via environment variables
+      - JWT_SECRET=${JWT_SECRET:-your-default-jwt-secret-here}
+    volumes:
+      # Persist SQLite database
+      - sqlite-data:/app/data
+    networks:
+      - app-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  sqlite-data:
+    driver: local

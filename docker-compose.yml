@@ -1,0 +1,41 @@
+
+services:
+  reverse-proxy:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - DB_PATH=/app/data/database.db
+      - JWT_SECRET=561613c444fa0d75d9a570f2877e748572709df1ef5f6e4c0b075ec0d5c3f422
+      - PORT=3001
+    depends_on:
+      - backends
+    networks:
+      - proxy-network
+    volumes:
+      - sqlite-data:/app/data
+
+  backends:
+    build: .
+    # Override entrypoint to run generate-servers.js
+    command: node generate-servers.js
+    ports:
+      - "4001:4001"
+      - "4002:4002"
+      - "4003:4003"
+      - "4004:4004"
+      - "4005:4005"
+      - "4006:4006"
+      - "4007:4007"
+      - "4008:4008"
+      - "4009:4009"
+      - "4010:4010"  # Add more if needed
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    driver: bridge
+volumes:
+  sqlite-data:

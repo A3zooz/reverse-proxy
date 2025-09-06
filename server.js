@@ -22,6 +22,11 @@ app.use(morgan('combined'));
 app.use('/api', authMiddleware, proxyRouter);
 app.use('/auth', authRouter);
 
+// Unauthenticated health endpoint for container/platform health checks
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
 
 
 
