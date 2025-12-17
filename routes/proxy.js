@@ -22,8 +22,22 @@ async function checkHealth(backend) {
 
 let currentBackendIndex = 0;
 const weightedBackends = backends.flatMap(backend => Array(backend.weight).fill(backend));
-const healthyBackends = weightedBackends.filter(backend => checkHealth(backend));
+let healthyBackends = [];
+export async function initHealthyBackends() {
+    const results = await Promise.all(
+        weightedBackends.map(async (backend) => ({
+            backend,
+            healthy: await checkHealth(backend)
+        }))
+    );
+    healthyBackends = results.filter(r => r.healthy).map(r => r.backend);
+    console.log(`Initialized ${healthyBackends.length} healthy backends`);
+}
+
 function getNextBackend() {
+    if (healthyBackends.length === 0) {
+        throw new Error('No healthy backends available');
+    }
     const backend = healthyBackends[currentBackendIndex];
     currentBackendIndex = (currentBackendIndex + 1) % healthyBackends.length;
     return backend;
@@ -46,5 +60,9 @@ proxyRouter.all('/', (req, res) => {
 proxyRouter.get('/health', (req, res) => {
     res.status(200).send('OK');
 });
+
+setInterval(async () => {
+    await initHealthyBackends();
+}, 30000);
 
 export default proxyRouter;
